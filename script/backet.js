@@ -1,74 +1,69 @@
-let basket_json = [
-     {
-      img: "..ice-cream/01.png",
-      name: "Zolotoy",
-      price: 15000,
-      count: 3,
-      "total price": 45000,
+let basket = document.querySelector('.display');
+let basket_json = {
+    1: {
+        'img': 'ice-cream/01.png',
+        'name': 'Zolotoy',
+        'price': 15000,
+        'count': 5,
+        'total price': 75000
     },
-     {
-      img: "../media/chocolate/04.png",
-      name: "Kit Kat",
-      price: 12000,
-      count: 1,
-      "total price": 12000,
+    2: {
+        'img': 'chocolate/04.png',
+        'name': 'Kit Kat',
+        'price': 12000,
+        'count': 3,
+        'total price': 36000
     },
-     {
-      img: "../media/drink/03.png",
-      name: "coca-cola",
-      price: 14000,
-      count: 3,
-      "total price": 42000,
+    3: {
+        'img': 'drink/03.png',
+        'name': 'coca-cola',
+        'price': 14000,
+        'count': 3,
+        'total price': 42000
     },
-    {
-      img: "../media/chocolate/13.png",
-      name: "Alpen Gold",
-      price: 13000,
-      count: 3,
-      "total price": 39000,
+    4: {
+        'img': 'chocolate/13.png',
+        'name': 'Alpen Gold',
+        'price': 13000,
+        'count': 4,
+        'total price': 52000
     },
-  ];
-  
-  
-  function renderBasket() {
-    const basketContainer = document.getElementById("basket");
-    basketContainer.innerHTML = ""; 
-  
-    Object.keys(basket_json).forEach((key) => {
-      const item = basket_json[key];
-  
-
-      const itemHTML = `
-        <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
-          <img src="${item.img}" alt="${item.name}" style="width: 100px; height: auto;">
-          <p><strong>Name:</strong> ${item.name}</p>
-          <p><strong>Price:</strong> ${item.price}</p>
-          <p><strong>Count:</strong> ${item.count}</p>
-          <p><strong>Total Price:</strong> ${item["total price"]}</p>
-          <button onclick="decreaseCount(${key})" style="color: blue;">-</button>
-          <button onclick="deleteItem(${key})" style="color: red;">Delete</button>
-        </div>
-      `;
-      basketContainer.innerHTML += itemHTML;
-    });
-  }
-  
-
-  function decreaseCount(key) {
-    if (basket_json[key].count > 1) {
-      basket_json[key].count--;
-      basket_json[key]["total price"] = basket_json[key].price * basket_json[key].count; // Пересчитываем общую стоимость
-    } else {
-      delete basket_json[key];
+};
+for (let i = 1; i <= 4; i++) {
+    let div = document.createElement("li");
+    div.classList.add("display-list");
+    div.innerHTML = `
+        <ul>
+            <img src="../media/${basket_json[i]['img']}" alt="">
+            <li class="display-list-name">name: ${basket_json[i]['name']}</li>
+            <li class="display-list-price">price: ${basket_json[i]['price']}</li>
+            <li class="display-list-count">count: ${basket_json[i]['count']}</li>
+            <li class="display-list-total">total price: ${basket_json[i]['total price']}</li>
+            <div class="buttons">
+                <button class="minus-button">-</button>
+                <button class="delete"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </ul>`;
+    basket.appendChild(div);
+}
+let minus=document.querySelectorAll('.minus-button')
+minus.forEach((n,index)=>{
+    n.onclick=()=>{
+        let item=basket_json[index+1]
+        if (item['count'] > 1) {
+            item['count'] -= 1;
+            item['total price'] -= item['price'];
+            let count_list=document.querySelectorAll('.display-list-count')
+            count_list[index].textContent = `count: ${item['count']}`;
+            let total_price=document.querySelectorAll('.display-list-total')
+            total_price[index].textContent = `total price: ${item['total price']}`;
+        }
     }
-    renderBasket(); 
-  }
-  
- 
-  function deleteItem(key) {
-    delete basket_json[key];
-    renderBasket(); 
-  }
-  
-  renderBasket();
-  
+})
+let list=document.querySelectorAll('.display-list')
+let remove=document.querySelectorAll('.delete')
+remove.forEach((n,index)=>{
+    n.onclick=()=>{
+        list[index].style.display='none'
+    }
+})
